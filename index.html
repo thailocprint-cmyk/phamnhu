@@ -1,1 +1,1259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bunniihaus – The Gift That Stays.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────
+   RESET & VARIABLES
+───────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#F4607A; --pink-soft:#FFE8EC; --pink-light:#FFD6DC;
+  --peach:#F9A87A; --teal:#7DD9CA;
+  --dark:#111111; --surface:#F5F4F2; --card:#FFFFFF;
+  --border:#EBEBEB; --text:#1A1A1A; --muted:#888;
+  --success:#2ECC71;
+  --gc1:#FFE8EA; --gc2:#FFF0E8; --gc3:#C8EFE8;
+  --sidebar-w:240px;
+}
 
+body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);overflow-x:hidden}
+
+/* ─────────────────────────────────────────
+   WEBSITE (PUBLIC) VIEW
+───────────────────────────────────────── */
+#website-view{
+  max-width:430px;
+  margin:0 auto;
+  min-height:100vh;
+  display:block;
+}
+#admin-view{ display:none; }
+
+/* HEADER */
+.site-header{background:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid #f0f0f0}
+.logo{font-family:'DM Serif Display',serif;font-size:26px;letter-spacing:-0.5px;color:var(--dark)}
+.logo span{font-family:'Playfair Display',serif;font-style:italic;color:var(--pink)}
+.header-icons{display:flex;gap:16px;align-items:center}
+.header-icons button{background:none;border:none;cursor:pointer;padding:4px;color:var(--dark)}
+.header-icons svg{width:22px;height:22px}
+
+/* HERO */
+.hero{margin:12px 14px;border-radius:24px;overflow:hidden;background:linear-gradient(135deg,var(--gc1) 0%,var(--gc2) 50%,var(--gc3) 100%);padding:20px;display:grid;grid-template-columns:1fr 1fr;min-height:240px;position:relative;transition:background 0.4s}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:6px;position:relative;z-index:1}
+.hero-img{border-radius:12px;background:white;display:flex;align-items:center;justify-content:center;aspect-ratio:1;font-size:32px;transition:background 0.3s}
+.hero-text{padding:8px 0 8px 14px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1}
+.hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:1.5px;color:var(--pink);text-transform:uppercase;margin-bottom:6px}
+.hero-title{font-family:'DM Serif Display',serif;font-size:22px;line-height:1.1;margin-bottom:4px}
+.hero-title em{font-family:'Playfair Display',serif;font-style:italic;color:var(--pink);display:block;font-size:20px}
+.hero-subtitle{font-size:10px;color:#888;line-height:1.4;margin-bottom:14px}
+.btn-shop{background:var(--pink);color:white;border:none;border-radius:50px;padding:10px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'DM Sans',sans-serif}
+.btn-shop:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(244,96,122,.35)}
+
+/* SEARCH */
+.search-row{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.search-wrap{flex:1;position:relative}
+.search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#bbb}
+.search-box{width:100%;border:none;border-radius:50px;padding:12px 16px 12px 40px;font-size:13px;color:#555;outline:none;background:white;font-family:'DM Sans',sans-serif}
+.filter-btn{width:44px;height:44px;background:var(--dark);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.filter-btn svg{width:18px;height:18px;color:white}
+
+/* PILLS */
+.categories{display:flex;gap:8px;padding:0 14px 14px;overflow-x:auto;scrollbar-width:none}
+.categories::-webkit-scrollbar{display:none}
+.pill{white-space:nowrap;padding:8px 16px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid #e0e0e0;background:white;color:var(--dark);transition:all .2s;flex-shrink:0;font-family:'DM Sans',sans-serif}
+.pill.active{background:var(--pink);border-color:var(--pink);color:white}
+
+/* COUNT ROW */
+.count-row{display:flex;justify-content:space-between;align-items:center;padding:0 14px 12px}
+.count-row span{font-size:12px;font-weight:600;letter-spacing:.5px;color:#555}
+
+/* PRODUCT GRID */
+.products{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px}
+.product-card{background:white;border-radius:18px;overflow:hidden;position:relative;transition:transform .2s}
+.product-card:hover{transform:translateY(-3px)}
+.product-badge{position:absolute;top:10px;left:10px;background:#FFF3E0;color:#E07A00;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;z-index:2}
+.wish-btn{position:absolute;top:10px;right:10px;background:white;border:none;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.wish-btn svg{width:14px;height:14px;color:#ddd;transition:color .2s}
+.wish-btn.liked svg{color:var(--pink);fill:var(--pink)}
+.product-img-placeholder{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:48px;transition:background .3s}
+.product-info{padding:10px 10px 12px}
+.product-name{font-weight:600;font-size:13px;margin-bottom:2px;line-height:1.3}
+.product-sub{font-size:10px;color:#aaa;letter-spacing:.5px;font-weight:500;margin-bottom:8px;text-transform:uppercase}
+.product-bottom{display:flex;align-items:center;justify-content:space-between}
+.product-price{font-size:14px;font-weight:700}
+.btn-consult{background:var(--pink);color:white;border:none;border-radius:50px;padding:7px 12px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;transition:background .2s;font-family:'DM Sans',sans-serif}
+.btn-consult:hover{background:#e0506a}
+.btn-consult svg{width:12px;height:12px}
+
+/* WHY SECTION */
+.why-section{margin:20px 14px;border-radius:24px;background:linear-gradient(135deg,#F87070 0%,#F9A87A 35%,#F9C97A 60%,#7DD9CA 100%);padding:28px 24px;position:relative;overflow:hidden}
+.why-eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.8);text-transform:uppercase;margin-bottom:8px}
+.why-title-block{font-family:'DM Serif Display',serif;font-size:28px;color:white;line-height:1.1;margin-bottom:4px}
+.why-title-block em{font-family:'Playfair Display',serif;font-style:italic}
+.why-desc{font-size:12px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:28px;white-space:pre-line}
+.why-divider{border:none;border-top:1px solid rgba(255,255,255,.25);margin-bottom:24px}
+.why-stats{display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center}
+.stat-number{font-family:'DM Serif Display',serif;font-size:26px;color:white;display:block;line-height:1.1;margin-bottom:4px}
+.stat-label{font-size:9px;color:rgba(255,255,255,.75);letter-spacing:1.5px;font-weight:600;text-transform:uppercase}
+
+/* FOOTER */
+.site-footer{background:var(--dark);color:white;padding:32px 20px 24px}
+.footer-logo{font-family:'DM Serif Display',serif;font-size:24px;margin-bottom:10px}
+.footer-logo span{font-family:'Playfair Display',serif;font-style:italic;color:var(--pink)}
+.footer-desc{font-size:12px;color:#666;line-height:1.6;margin-bottom:24px}
+.footer-links{display:flex;gap:20px;margin-bottom:20px;flex-wrap:wrap}
+.footer-links a{color:#999;text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+.footer-links a:hover{color:white}
+.footer-socials{display:flex;gap:10px;margin-bottom:24px}
+.social-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid #333;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s}
+.social-btn:hover{border-color:#666}
+.social-btn svg{width:16px;height:16px;color:#999}
+.footer-copy{font-size:11px;color:#444;line-height:1.6}
+
+/* STICKY CTA */
+.sticky-cta{position:sticky;bottom:0;display:flex;gap:10px;padding:12px 14px 20px;background:linear-gradient(to top,white 70%,transparent)}
+.btn-zalo{flex:1;background:#0068FF;color:white;border:none;border-radius:50px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',sans-serif;text-decoration:none;transition:background .2s}
+.btn-zalo:hover{background:#0052cc}
+.btn-messenger{flex:1;background:white;color:var(--dark);border:1.5px solid #e0e0e0;border-radius:50px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',sans-serif;text-decoration:none;transition:border-color .2s}
+.btn-messenger:hover{border-color:#ccc}
+
+/* PAGE ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.hero{animation:fadeUp .5s ease both}
+.search-row{animation:fadeUp .5s .08s ease both}
+.categories{animation:fadeUp .5s .13s ease both}
+.products{animation:fadeUp .5s .18s ease both}
+
+/* ─────────────────────────────────────────
+   PASSWORD LOCK OVERLAY
+───────────────────────────────────────── */
+#lock-overlay{
+  position:fixed;inset:0;
+  background:rgba(10,10,10,.92);
+  backdrop-filter:blur(12px);
+  z-index:9000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+#lock-overlay.show{display:flex}
+.lock-box{
+  background:white;
+  border-radius:24px;
+  padding:36px 32px;
+  width:320px;
+  text-align:center;
+  animation:fadeUp .3s ease both;
+}
+.lock-icon{font-size:36px;margin-bottom:12px}
+.lock-title{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:4px}
+.lock-sub{font-size:12px;color:#999;margin-bottom:20px}
+.lock-input{
+  width:100%;border:2px solid #eee;border-radius:12px;
+  padding:12px 16px;font-size:14px;font-family:'DM Sans',sans-serif;
+  text-align:center;letter-spacing:4px;outline:none;transition:border-color .2s;
+}
+.lock-input:focus{border-color:var(--pink)}
+.lock-input.error{border-color:#e74c3c;animation:shake .3s ease}
+.lock-btn{
+  width:100%;margin-top:12px;background:var(--dark);color:white;
+  border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:700;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s;
+}
+.lock-btn:hover{background:#222}
+.lock-cancel{display:block;margin-top:10px;font-size:12px;color:#bbb;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
+.lock-cancel:hover{color:#666}
+.lock-hint{font-size:11px;color:#bbb;margin-top:14px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ─────────────────────────────────────────
+   ADMIN VIEW
+───────────────────────────────────────── */
+#admin-view{
+  display:none;
+  min-height:100vh;
+  background:var(--surface);
+}
+#admin-view.show{display:flex}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:#0F0F0F;min-height:100vh;display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;overflow-y:auto}
+.sidebar-logo{padding:24px 20px 18px;border-bottom:1px solid #1a1a1a}
+.sidebar-logo .s-logo{font-family:'DM Serif Display',serif;font-size:18px;color:white}
+.sidebar-logo .s-logo span{font-family:'Playfair Display',serif;font-style:italic;color:var(--pink)}
+.sidebar-logo .s-sub{font-size:9px;color:#333;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px}
+.sidebar-logo .s-mode{display:inline-block;margin-top:6px;background:#1a1a1a;color:#666;font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:20px}
+nav.s-nav{padding:12px 10px;flex:1}
+.nav-label{font-size:9px;color:#2a2a2a;letter-spacing:1.5px;text-transform:uppercase;padding:0 10px;margin:14px 0 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;color:#555;cursor:pointer;font-size:12px;font-weight:500;transition:all .15s;margin-bottom:1px;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.nav-item svg{width:14px;height:14px;flex-shrink:0}
+.nav-item:hover{background:#1a1a1a;color:#ccc}
+.nav-item.active{background:var(--pink);color:white}
+.sidebar-bottom{padding:14px 10px;border-top:1px solid #1a1a1a}
+.exit-btn{width:100%;background:#1a1a1a;border:1px solid #252525;color:#555;border-radius:9px;padding:9px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Sans',sans-serif;transition:all .2s}
+.exit-btn:hover{border-color:#444;color:#aaa}
+.exit-btn svg{width:13px;height:13px}
+
+/* ADMIN MAIN */
+.admin-main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* TOPBAR */
+.admin-topbar{background:white;border-bottom:1px solid var(--border);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:14px;font-weight:700}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.save-all-btn{background:var(--pink);color:white;border:none;border-radius:9px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.save-all-btn:hover{background:#e0506a;transform:translateY(-1px)}
+.save-all-btn svg{width:13px;height:13px}
+
+/* CONTENT */
+.admin-content{padding:28px;flex:1}
+.s-page{display:none}
+.s-page.active{display:block}
+
+/* CARDS */
+.a-card{background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:18px;overflow:hidden}
+.a-card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.a-card-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
+.a-card-title svg{width:14px;height:14px;color:var(--pink)}
+.a-card-body{padding:20px}
+
+/* FORM */
+.f-field{margin-bottom:16px}
+.f-field:last-child{margin-bottom:0}
+.f-field label{display:block;font-size:11px;font-weight:700;color:#666;margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase}
+.f-field input,.f-field textarea,.f-field select{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:white;outline:none;transition:border-color .2s}
+.f-field input:focus,.f-field textarea:focus,.f-field select:focus{border-color:var(--pink)}
+.f-field textarea{resize:vertical;min-height:70px}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* COLOR */
+.color-wrap{display:flex;align-items:center;gap:8px}
+.color-wrap input[type=color]{width:38px;height:38px;border:2px solid var(--border);border-radius:9px;padding:2px;cursor:pointer;flex-shrink:0}
+.color-wrap input[type=text]{flex:1}
+
+/* GRADIENT PREVIEW */
+.grad-prev{height:52px;border-radius:10px;margin-bottom:10px;transition:background .3s;border:1px solid var(--border)}
+
+/* TOGGLE */
+.t-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border)}
+.t-row:last-child{border-bottom:none;padding-bottom:0}
+.t-label{font-size:13px;font-weight:500}
+.t-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.tog{width:42px;height:22px;background:#ddd;border-radius:50px;position:relative;cursor:pointer;transition:background .2s;border:none;flex-shrink:0}
+.tog.on{background:var(--pink)}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:white;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tog.on::after{left:23px}
+
+/* STATS DASHBOARD */
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.ds-card{background:white;border:1px solid var(--border);border-radius:12px;padding:18px}
+.ds-num{font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:3px}
+.ds-label{font-size:11px;color:var(--muted)}
+.ds-badge{display:inline-block;margin-top:5px;font-size:10px;font-weight:600;color:var(--success)}
+
+/* PRODUCT TABLE */
+.p-table{width:100%;border-collapse:collapse}
+.p-table th{text-align:left;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;padding:0 10px 10px;text-transform:uppercase}
+.p-table th:first-child{padding-left:20px}
+.p-table td{padding:10px;border-top:1px solid var(--border);font-size:12px;vertical-align:middle}
+.p-table td:first-child{padding-left:20px}
+.p-table tr:hover td{background:#fafafa}
+.p-emoji{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.p-badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:700}
+.pb-bs{background:#FFF3E0;color:#E07A00}
+.pb-new{background:#E8F8F0;color:#1a8a4a}
+.pb-sale{background:#FFE8EC;color:var(--pink)}
+.a-btns{display:flex;gap:5px}
+.a-btn{width:30px;height:30px;border:1.5px solid var(--border);border-radius:7px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.a-btn:hover{border-color:var(--pink);color:var(--pink)}
+.a-btn.del:hover{border-color:#e74c3c;color:#e74c3c}
+.a-btn svg{width:13px;height:13px}
+.add-row-btn{background:var(--pink-soft);color:var(--pink);border:1.5px dashed var(--pink);border-radius:10px;padding:11px;font-size:12px;font-weight:600;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;font-family:'DM Sans',sans-serif;transition:background .2s}
+.add-row-btn:hover{background:#FFD6DC}
+.add-row-btn svg{width:14px;height:14px}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:white;border-radius:18px;width:460px;max-width:90vw;max-height:85vh;overflow-y:auto;transform:scale(.95);transition:transform .2s}
+.modal-ov.open .modal{transform:scale(1)}
+.modal-head{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.modal-title{font-size:15px;font-weight:700}
+.modal-x{width:30px;height:30px;background:var(--surface);border:none;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-x svg{width:14px;height:14px}
+.modal-body{padding:0 20px 20px}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.btn-cancel{padding:9px 18px;border:1.5px solid var(--border);border-radius:9px;background:white;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-ok{padding:9px 18px;background:var(--pink);border:none;border-radius:9px;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+.btn-ok:hover{background:#e0506a}
+
+/* EMOJI PICKER */
+.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-top:7px}
+.em-opt{font-size:22px;border:2px solid transparent;border-radius:7px;padding:3px;text-align:center;cursor:pointer;transition:all .15s;line-height:1.2}
+.em-opt:hover,.em-opt.sel{border-color:var(--pink);background:var(--pink-soft)}
+
+/* TOAST */
+.toast{position:fixed;top:18px;right:18px;background:#0F0F0F;color:white;padding:11px 18px;border-radius:11px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:7px;z-index:9999;transform:translateY(-70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast svg{width:14px;height:14px;color:var(--success)}
+
+/* CATEGORIES LIST */
+.cat-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.cat-row:last-of-type{border-bottom:none}
+
+/* STATS EDIT */
+.stat-edit-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.stat-edit-row:last-child{border-bottom:none}
+
+/* WHY STATS NUMBERS */
+.why-stat-item .stat-number{font-size:20px}
+.why-stat-item:last-child .stat-number{font-size:16px}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
+  .sidebar.mob-open{transform:translateX(0)}
+  .admin-main{margin-left:0}
+  .dash-stats{grid-template-columns:1fr 1fr}
+  .f-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     PUBLIC WEBSITE VIEW
+═══════════════════════════════════════ -->
+<div id="website-view">
+
+  <header class="site-header">
+    <div class="logo" id="site-logo">Bunnii<span>haus</span></div>
+    <div class="header-icons">
+      <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+      <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    </div>
+  </header>
+
+  <div class="hero" id="site-hero">
+    <div class="hero-grid" id="hero-img-grid"></div>
+    <div class="hero-text">
+      <div class="hero-eyebrow" id="site-eyebrow">Authentic Jellycat</div>
+      <div class="hero-title">
+        <span id="site-brand-text">Bunnii</span><span id="site-brand-italic" style="font-family:'Playfair Display',serif;font-style:italic;color:var(--pink)">haus</span>
+        <em id="site-tagline">The Gift That Stays.</em>
+      </div>
+      <p class="hero-subtitle"><span id="site-addr1">207 Hoang Sa,</span><br><span id="site-addr2">Tan Dinh Dist. HCMC.</span></p>
+      <button class="btn-shop" id="site-cta-btn">Shop Now →</button>
+    </div>
+  </div>
+
+  <div class="search-row">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-box" type="text" placeholder="Tìm sản phẩm Jellycat..." id="site-search">
+    </div>
+    <button class="filter-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg></button>
+  </div>
+
+  <div class="categories" id="site-categories"></div>
+
+  <div class="count-row">
+    <span id="site-prod-count">0 SẢN PHẨM</span>
+  </div>
+
+  <div class="products" id="site-products"></div>
+
+  <div class="why-section" id="site-why">
+    <div class="why-eyebrow" id="why-eyebrow-text">Why Bunniihaus</div>
+    <div class="why-title-block">
+      <span id="why-title-text">Certified Authentic.</span><br>
+      <em id="why-italic-text">Premium Gifting.</em>
+    </div>
+    <p class="why-desc" id="why-desc-text">Imported direct from Jellycat UK.
+Invoice · Original tags · Sealed packaging.</p>
+    <hr class="why-divider">
+    <div class="why-stats" id="why-stats-display"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-logo" id="footer-logo-text" onclick="secretTap()" style="cursor:default;user-select:none">Bunnii<span>haus</span></div>
+    <div id="tap-indicator" style="height:4px;background:transparent;border-radius:2px;width:60px;margin-bottom:8px;transition:background 0.2s;overflow:hidden"><div id="tap-bar" style="height:100%;width:0%;background:var(--pink);border-radius:2px;transition:width 0.2s"></div></div>
+    <p class="footer-desc"><span id="footer-addr">207 Hoang Sa, Tan Dinh Dist. HCMC.</span><br><span id="footer-tag">The Gift That Stays. · Authentic Jellycat Vietnam</span></p>
+    <div class="footer-links" id="footer-menu"></div>
+    <div class="footer-socials">
+      <a id="social-fb" href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+      <a id="social-ig" href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+      <a id="social-mess" href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a>
+    </div>
+    <p class="footer-copy" id="footer-copy">© 2025 Bunniihaus · The Gift That Stays.</p>
+  </footer>
+
+  <div class="sticky-cta">
+    <a href="#" id="cta-zalo" class="btn-zalo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span id="cta-zalo-text">Chat Zalo</span>
+    </a>
+    <a href="#" id="cta-mess" class="btn-messenger">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16" style="color:var(--pink)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span id="cta-mess-text">Messenger</span>
+    </a>
+  </div>
+
+</div><!-- /website-view -->
+
+<!-- ═══════════════════════════════════════
+     PASSWORD LOCK OVERLAY
+═══════════════════════════════════════ -->
+<div id="lock-overlay">
+  <div class="lock-box">
+    <div class="lock-icon">🔐</div>
+    <div class="lock-title">Admin Panel</div>
+    <div class="lock-sub">Nhập mật khẩu để tiếp tục</div>
+    <input class="lock-input" type="password" id="pw-input" placeholder="••••••••" maxlength="20"
+      onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="lock-btn" onclick="checkPw()">Đăng nhập</button>
+    <button class="lock-cancel" onclick="closeLock()">← Quay lại website</button>
+    <div class="lock-hint">Gợi ý: nhấn <strong>Ctrl + Shift + A</strong> để mở</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     ADMIN VIEW
+═══════════════════════════════════════ -->
+<div id="admin-view">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="s-logo">Bunnii<span>haus</span></div>
+      <div class="s-sub">Content Manager</div>
+      <div class="s-mode">🔒 Admin Mode</div>
+    </div>
+    <nav class="s-nav">
+      <div class="nav-label">Tổng quan</div>
+      <button class="nav-item active" onclick="adminGo('dashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <div class="nav-label">Nội dung trang</div>
+      <button class="nav-item" onclick="adminGo('hero',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        Hero Banner
+      </button>
+      <button class="nav-item" onclick="adminGo('products',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+        Sản phẩm
+      </button>
+      <button class="nav-item" onclick="adminGo('categories',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h8M4 18h4"/></svg>
+        Danh mục
+      </button>
+      <button class="nav-item" onclick="adminGo('why',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        Why Section
+      </button>
+      <div class="nav-label">Cài đặt</div>
+      <button class="nav-item" onclick="adminGo('branding',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        Màu & Thương hiệu
+      </button>
+      <button class="nav-item" onclick="adminGo('contact',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Liên hệ & Links
+      </button>
+      <button class="nav-item" onclick="adminGo('security',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Bảo mật
+      </button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="exit-btn" onclick="exitAdmin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Thoát Admin
+      </button>
+    </div>
+  </aside>
+
+  <!-- ADMIN MAIN -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div class="topbar-title" id="admin-page-title">Dashboard</div>
+      <div class="topbar-right">
+        <button class="save-all-btn" onclick="applyAll()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Áp dụng thay đổi
+        </button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div class="s-page active" id="ap-dashboard">
+        <div class="dash-stats">
+          <div class="ds-card"><div class="ds-num" id="ds-prods">6</div><div class="ds-label">Sản phẩm</div><div class="ds-badge">✓ Hiển thị</div></div>
+          <div class="ds-card"><div class="ds-num" id="ds-cats">7</div><div class="ds-label">Danh mục</div><div class="ds-badge">✓ Active</div></div>
+          <div class="ds-card"><div class="ds-num" style="color:var(--pink)">Live</div><div class="ds-label">Trạng thái</div><div class="ds-badge">✓ Online</div></div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>Hướng dẫn sử dụng Admin</div></div>
+          <div class="a-card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="background:var(--surface);border-radius:10px;padding:14px;cursor:pointer" onclick="adminGo('hero',document.querySelectorAll('.nav-item')[1])">
+                <div style="font-size:18px;margin-bottom:6px">🖼️</div>
+                <div style="font-size:12px;font-weight:700;margin-bottom:3px">Hero Banner</div>
+                <div style="font-size:11px;color:var(--muted)">Tiêu đề, tagline, gradient</div>
+              </div>
+              <div style="background:var(--surface);border-radius:10px;padding:14px;cursor:pointer" onclick="adminGo('products',document.querySelectorAll('.nav-item')[2])">
+                <div style="font-size:18px;margin-bottom:6px">📦</div>
+                <div style="font-size:12px;font-weight:700;margin-bottom:3px">Sản phẩm</div>
+                <div style="font-size:11px;color:var(--muted)">Thêm/sửa/xóa sản phẩm</div>
+              </div>
+              <div style="background:var(--surface);border-radius:10px;padding:14px;cursor:pointer" onclick="adminGo('branding',document.querySelectorAll('.nav-item')[6])">
+                <div style="font-size:18px;margin-bottom:6px">🎨</div>
+                <div style="font-size:12px;font-weight:700;margin-bottom:3px">Màu sắc</div>
+                <div style="font-size:11px;color:var(--muted)">Pink, gradient, on/off sections</div>
+              </div>
+              <div style="background:var(--surface);border-radius:10px;padding:14px;cursor:pointer" onclick="adminGo('contact',document.querySelectorAll('.nav-item')[7])">
+                <div style="font-size:18px;margin-bottom:6px">📱</div>
+                <div style="font-size:12px;font-weight:700;margin-bottom:3px">Liên hệ</div>
+                <div style="font-size:11px;color:var(--muted)">Zalo, Messenger, địa chỉ</div>
+              </div>
+            </div>
+            <div style="margin-top:14px;background:#FFF8E8;border-radius:10px;padding:12px;font-size:12px;color:#886600;line-height:1.6">
+              💡 <strong>Mẹo:</strong> Sau khi chỉnh xong, nhấn <strong>"Áp dụng thay đổi"</strong> để cập nhật website. Thay đổi lưu vào trình duyệt này và tự nạp lại mỗi lần mở file.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <div class="s-page" id="ap-hero">
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Nội dung Hero</div></div>
+          <div class="a-card-body">
+            <div class="f-row">
+              <div class="f-field"><label>Dòng nhỏ trên (eyebrow)</label><input type="text" id="a-eyebrow" value="Authentic Jellycat"></div>
+              <div class="f-field"><label>Tên thương hiệu</label><input type="text" id="a-brand" value="Bunniihaus"></div>
+            </div>
+            <div class="f-field"><label>Tagline chính (in nghiêng)</label><input type="text" id="a-tagline" value="The Gift That Stays."></div>
+            <div class="f-row">
+              <div class="f-field"><label>Địa chỉ dòng 1</label><input type="text" id="a-addr1" value="207 Hoang Sa,"></div>
+              <div class="f-field"><label>Địa chỉ dòng 2</label><input type="text" id="a-addr2" value="Tan Dinh Dist. HCMC."></div>
+            </div>
+            <div class="f-field"><label>Text nút Shop Now</label><input type="text" id="a-cta" value="Shop Now →"></div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Gradient nền Hero</div></div>
+          <div class="a-card-body">
+            <div class="grad-prev" id="a-grad-prev"></div>
+            <div class="f-row" style="grid-template-columns:1fr 1fr 1fr">
+              <div class="f-field"><label>Màu trái</label><div class="color-wrap"><input type="color" id="agc1" value="#FFE8EA" oninput="syncAdminGrad()"><input type="text" id="agc1t" value="#FFE8EA" oninput="syncAdminGradText('agc1','agc1t')"></div></div>
+              <div class="f-field"><label>Màu giữa</label><div class="color-wrap"><input type="color" id="agc2" value="#FFF0E8" oninput="syncAdminGrad()"><input type="text" id="agc2t" value="#FFF0E8" oninput="syncAdminGradText('agc2','agc2t')"></div></div>
+              <div class="f-field"><label>Màu phải</label><div class="color-wrap"><input type="color" id="agc3" value="#C8EFE8" oninput="syncAdminGrad()"><input type="text" id="agc3t" value="#C8EFE8" oninput="syncAdminGradText('agc3','agc3t')"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="s-page" id="ap-products">
+        <div class="a-card">
+          <div class="a-card-header">
+            <div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>Danh sách sản phẩm</div>
+            <span style="font-size:11px;color:var(--muted)" id="prod-count-lbl">6 sản phẩm</span>
+          </div>
+          <div class="a-card-body" style="padding:0">
+            <table class="p-table">
+              <thead><tr><th>Ảnh</th><th>Tên</th><th>Phân loại</th><th>Giá</th><th>Badge</th><th style="padding-right:16px">Sửa</th></tr></thead>
+              <tbody id="prod-tbody"></tbody>
+            </table>
+            <div style="padding:0 14px 14px">
+              <button class="add-row-btn" onclick="openProdModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Thêm sản phẩm mới
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORIES -->
+      <div class="s-page" id="ap-categories">
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h8M4 18h4"/></svg>Danh mục lọc</div></div>
+          <div class="a-card-body" id="cat-list-body"></div>
+        </div>
+        <button class="add-row-btn" style="margin-top:0" onclick="addCat()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Thêm danh mục
+        </button>
+      </div>
+
+      <!-- WHY -->
+      <div class="s-page" id="ap-why">
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>Nội dung Why Section</div></div>
+          <div class="a-card-body">
+            <div class="f-field"><label>Eyebrow</label><input type="text" id="a-why-eyebrow" value="Why Bunniihaus"></div>
+            <div class="f-field"><label>Tiêu đề</label><input type="text" id="a-why-title" value="Certified Authentic."></div>
+            <div class="f-field"><label>In nghiêng</label><input type="text" id="a-why-italic" value="Premium Gifting."></div>
+            <div class="f-field"><label>Mô tả</label><textarea id="a-why-desc">Imported direct from Jellycat UK.
+Invoice · Original tags · Sealed packaging.</textarea></div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>3 Con số thống kê</div></div>
+          <div class="a-card-body" id="why-stats-edit"></div>
+        </div>
+      </div>
+
+      <!-- BRANDING -->
+      <div class="s-page" id="ap-branding">
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Màu thương hiệu</div></div>
+          <div class="a-card-body">
+            <div class="f-row">
+              <div class="f-field"><label>Màu hồng chính</label><div class="color-wrap"><input type="color" id="a-pink" value="#F4607A" oninput="syncBrand()"><input type="text" id="a-pinkt" value="#F4607A" oninput="syncColorText('a-pink','a-pinkt')"></div></div>
+              <div class="f-field"><label>Màu tối (dark)</label><div class="color-wrap"><input type="color" id="a-dark" value="#111111" oninput="syncBrand()"><input type="text" id="a-darkt" value="#111111" oninput="syncColorText('a-dark','a-darkt')"></div></div>
+            </div>
+            <div class="f-field">
+              <label>Preview Logo</label>
+              <div style="background:white;border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;font-family:'DM Serif Display',serif;font-size:26px" id="logo-prev-box">Bunnii<span id="logo-prev-span" style="font-family:'Playfair Display',serif;font-style:italic;color:#F4607A">haus</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Bật / Tắt sections</div></div>
+          <div class="a-card-body">
+            <div class="t-row"><div><div class="t-label">Hero Banner</div><div class="t-desc">Ảnh grid + text phía trên</div></div><button class="tog on" onclick="this.classList.toggle('on')" data-sec="hero"></button></div>
+            <div class="t-row"><div><div class="t-label">Thanh tìm kiếm</div><div class="t-desc">Search + filter button</div></div><button class="tog on" onclick="this.classList.toggle('on')" data-sec="search"></button></div>
+            <div class="t-row"><div><div class="t-label">Category Pills</div><div class="t-desc">Danh mục lọc ngang</div></div><button class="tog on" onclick="this.classList.toggle('on')" data-sec="cats"></button></div>
+            <div class="t-row"><div><div class="t-label">Why Bunniihaus</div><div class="t-desc">Gradient section thống kê</div></div><button class="tog on" onclick="this.classList.toggle('on')" data-sec="why"></button></div>
+            <div class="t-row"><div><div class="t-label">Sticky CTA Buttons</div><div class="t-desc">Nút Zalo + Messenger</div></div><button class="tog on" onclick="this.classList.toggle('on')" data-sec="cta"></button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="s-page" id="ap-contact">
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Thông tin cơ bản</div></div>
+          <div class="a-card-body">
+            <div class="f-field"><label>Địa chỉ (footer)</label><input type="text" id="a-faddr" value="207 Hoang Sa, Tan Dinh Dist. HCMC."></div>
+            <div class="f-field"><label>Tagline (footer)</label><input type="text" id="a-ftag" value="The Gift That Stays. · Authentic Jellycat Vietnam"></div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Links & Nút Chat</div></div>
+          <div class="a-card-body">
+            <div class="f-row">
+              <div class="f-field"><label>Link Zalo</label><input type="text" id="a-zalo-url" placeholder="https://zalo.me/..."></div>
+              <div class="f-field"><label>Text nút Zalo</label><input type="text" id="a-zalo-txt" value="Chat Zalo"></div>
+            </div>
+            <div class="f-row">
+              <div class="f-field"><label>Link Messenger</label><input type="text" id="a-mess-url" placeholder="https://m.me/..."></div>
+              <div class="f-field"><label>Text nút Messenger</label><input type="text" id="a-mess-txt" value="Messenger"></div>
+            </div>
+            <div class="f-row">
+              <div class="f-field"><label>Link Facebook</label><input type="text" id="a-fb-url" placeholder="https://facebook.com/..."></div>
+              <div class="f-field"><label>Link Instagram</label><input type="text" id="a-ig-url" placeholder="https://instagram.com/..."></div>
+            </div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10"/></svg>Menu Footer</div></div>
+          <div class="a-card-body" id="footer-menu-edit"></div>
+        </div>
+      </div>
+
+      <!-- SECURITY -->
+      <div class="s-page" id="ap-security">
+        <div class="a-card">
+          <div class="a-card-header"><div class="a-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Đổi mật khẩu Admin</div></div>
+          <div class="a-card-body">
+            <div class="f-field"><label>Mật khẩu mới</label><input type="password" id="new-pw" placeholder="Nhập mật khẩu mới"></div>
+            <div class="f-field"><label>Xác nhận lại</label><input type="password" id="confirm-pw" placeholder="Nhập lại mật khẩu"></div>
+            <button class="save-all-btn" style="margin-top:8px;width:auto" onclick="changePw()">Đổi mật khẩu</button>
+            <div style="margin-top:14px;background:var(--surface);border-radius:10px;padding:12px;font-size:12px;color:var(--muted);line-height:1.6">
+              🔑 Mật khẩu mặc định: <strong>admin123</strong><br>
+              ⌨️ Phím tắt mở admin: <strong>Ctrl + Shift + A</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </main><!-- /admin-main -->
+
+</div><!-- /admin-view -->
+
+<!-- MODAL: Add / Edit Product -->
+<div class="modal-ov" id="prod-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-mode-txt">Thêm sản phẩm</div>
+      <button class="modal-x" onclick="closeProdModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-idx">
+      <div class="f-field"><label>Tên sản phẩm</label><input type="text" id="m-name" placeholder="VD: Smudge Rabbit"></div>
+      <div class="f-row">
+        <div class="f-field"><label>Phân loại</label><input type="text" id="m-sub" placeholder="JELLYCAT · MEDIUM"></div>
+        <div class="f-field"><label>Giá</label><input type="text" id="m-price" placeholder="890.000đ"></div>
+      </div>
+      <div class="f-field"><label>Badge</label>
+        <select id="m-badge"><option value="">Không có</option><option value="Best Seller">Best Seller</option><option value="New">New</option><option value="Sale">Sale</option><option value="Hot">Hot</option></select>
+      </div>
+      <div class="f-field"><label>Màu nền ảnh</label><div class="color-wrap"><input type="color" id="m-bg" value="#F8F5F0" oninput="document.getElementById('m-bgt').value=this.value;updateImgPreview()"><input type="text" id="m-bgt" value="#F8F5F0" oninput="syncColorText('m-bg','m-bgt');updateImgPreview()"></div></div>
+      <div class="f-field">
+        <label>Hình ảnh sản phẩm</label>
+        <!-- Preview -->
+        <div id="img-preview-wrap" style="width:100%;aspect-ratio:1;border-radius:12px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:10px;overflow:hidden;position:relative;background:#F8F5F0;cursor:pointer" onclick="document.getElementById('m-img-upload').click()">
+          <div id="img-preview-inner" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;color:#bbb">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span style="font-size:12px">Nhấn để chọn ảnh</span>
+          </div>
+          <img id="img-preview-img" src="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none">
+          <button id="img-remove-btn" onclick="removeImg(event)" style="display:none;position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.5);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:white;font-size:14px;align-items:center;justify-content:center">✕</button>
+        </div>
+        <!-- Upload từ máy -->
+        <input type="file" id="m-img-upload" accept="image/*" style="display:none" onchange="handleImgUpload(event)">
+        <button type="button" onclick="document.getElementById('m-img-upload').click()" style="width:100%;background:var(--pink-soft);color:var(--pink);border:1.5px dashed var(--pink);border-radius:9px;padding:9px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload ảnh từ máy tính
+        </button>
+        <!-- Hoặc URL -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+          <span style="font-size:11px;color:var(--muted)">hoặc</span>
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+        </div>
+        <input type="text" id="m-img-url" placeholder="Dán link URL ảnh (https://...)" oninput="handleUrlInput(this.value)" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 13px;font-size:12px;font-family:'DM Sans',sans-serif;outline:none">
+        <input type="hidden" id="m-img-data" value="">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeProdModal()">Hủy</button>
+      <button class="btn-ok" onclick="saveProd()">Lưu sản phẩm</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg">Đã áp dụng!</span>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+//  DATA & STATE
+// ═══════════════════════════════════════
+const EMOJIS = ['🐰','🐇','🧸','🦔','🥔','🐱','🐻','🐼','🦊','🐨','🦋','🌸','🍓','🌈','⭐','🎁','🎀','🐸','🦄','🐮','🐷','🐙','🍀','🌺'];
+const ADMIN_PW_KEY = 'bunnii_admin_pw';
+const DATA_KEY = 'bunnii_data';
+
+const DEFAULT = {
+  pw: 'admin123',
+  hero: { eyebrow:'Authentic Jellycat', brand:'Bunniihaus', tagline:'The Gift That Stays.', addr1:'207 Hoang Sa,', addr2:'Tan Dinh Dist. HCMC.', cta:'Shop Now →' },
+  gradient: { c1:'#FFE8EA', c2:'#FFF0E8', c3:'#C8EFE8' },
+  colors: { pink:'#F4607A', dark:'#111111' },
+  products: [
+    {name:'Smudge Rabbit',sub:'JELLYCAT · MEDIUM',price:'890.000đ',badge:'Best Seller',emoji:'🐰',bg:'#F8F5F0'},
+    {name:'Amuseables Potato',sub:'JELLYCAT · MEDIUM',price:'680.000đ',badge:'',emoji:'🥔',bg:'#FFF5E8'},
+    {name:'Bashful Blue Bunny',sub:'JELLYCAT · LARGE',price:'1.250.000đ',badge:'New',emoji:'🐇',bg:'#F0F0FF'},
+    {name:'Odell Octopus',sub:'JELLYCAT · SMALL',price:'720.000đ',badge:'',emoji:'🐱',bg:'#FFF0F8'},
+    {name:'Cordy Roy Fox',sub:'JELLYCAT · MEDIUM',price:'950.000đ',badge:'',emoji:'🦔',bg:'#FFF8E8'},
+    {name:'Blossom Cream Bunny',sub:'JELLYCAT · LARGE',price:'1.450.000đ',badge:'Best Seller',emoji:'🧸',bg:'#F0FFF8'},
+  ],
+  categories: ['Tất cả','Smudge','Bashful','Amuseables','Blusher','Odell','Cordy Roy'],
+  why: { eyebrow:'Why Bunniihaus', title:'Certified Authentic.', italic:'Premium Gifting.', desc:'Imported direct from Jellycat UK.\nInvoice · Original tags · Sealed packaging.' },
+  whyStats: [{num:'100%',label:'AUTHENTIC'},{num:'3K+',label:'CLIENTS'},{num:'Vietnam\n& Global',label:'SHIPPING'}],
+  contact: { addr:'207 Hoang Sa, Tan Dinh Dist. HCMC.', tag:'The Gift That Stays. · Authentic Jellycat Vietnam', zaloUrl:'', zaloTxt:'Chat Zalo', messUrl:'', messTxt:'Messenger', fbUrl:'', igUrl:'' },
+  footerMenu: ['Shop','About','Contact','Policy'],
+};
+
+let D = loadData();
+let selEmoji = '🐰';
+
+function loadData() {
+  try { const s=localStorage.getItem(DATA_KEY); return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT)); }
+  catch(e){ return JSON.parse(JSON.stringify(DEFAULT)); }
+}
+function saveData() { localStorage.setItem(DATA_KEY, JSON.stringify(D)); }
+
+// ═══════════════════════════════════════
+//  PASSWORD / AUTH
+// ═══════════════════════════════════════
+function openLock() { document.getElementById('lock-overlay').classList.add('show'); document.getElementById('pw-input').value=''; setTimeout(()=>document.getElementById('pw-input').focus(),100); }
+function closeLock() { document.getElementById('lock-overlay').classList.remove('show'); }
+
+function checkPw() {
+  const v = document.getElementById('pw-input').value;
+  const stored = localStorage.getItem(ADMIN_PW_KEY) || DEFAULT.pw;
+  if(v === stored) { closeLock(); enterAdmin(); }
+  else {
+    const inp = document.getElementById('pw-input');
+    inp.classList.add('error');
+    inp.value='';
+    inp.placeholder='Sai mật khẩu, thử lại!';
+    setTimeout(()=>{ inp.classList.remove('error'); inp.placeholder='••••••••'; },1000);
+  }
+}
+
+function changePw() {
+  const np=document.getElementById('new-pw').value;
+  const cp=document.getElementById('confirm-pw').value;
+  if(!np){ showToast('Nhập mật khẩu mới!'); return; }
+  if(np!==cp){ showToast('Mật khẩu không khớp!'); return; }
+  localStorage.setItem(ADMIN_PW_KEY, np);
+  document.getElementById('new-pw').value='';
+  document.getElementById('confirm-pw').value='';
+  showToast('Đã đổi mật khẩu thành công!');
+}
+
+// Ctrl+Shift+A
+document.addEventListener('keydown', e => {
+  if(e.ctrlKey && e.shiftKey && e.key==='A') { e.preventDefault(); openLock(); }
+});
+
+// ═══════════════════════════════════════
+//  ENTER / EXIT ADMIN
+// ═══════════════════════════════════════
+function enterAdmin() {
+  document.getElementById('website-view').style.display='none';
+  document.getElementById('admin-view').classList.add('show');
+  loadAdminFields();
+  renderAll();
+}
+
+function exitAdmin() {
+  document.getElementById('admin-view').classList.remove('show');
+  document.getElementById('website-view').style.display='block';
+  applyToWebsite();
+  showToast('Đã thoát Admin');
+}
+
+// ═══════════════════════════════════════
+//  ADMIN NAVIGATION
+// ═══════════════════════════════════════
+const PAGE_TITLES = {dashboard:'Dashboard',hero:'Hero Banner',products:'Sản phẩm',categories:'Danh mục',why:'Why Section',branding:'Màu & Thương hiệu',contact:'Liên hệ & Links',security:'Bảo mật'};
+
+function adminGo(id, btn) {
+  document.querySelectorAll('.s-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('ap-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  document.getElementById('admin-page-title').textContent = PAGE_TITLES[id]||id;
+}
+
+// ═══════════════════════════════════════
+//  LOAD ADMIN FIELDS FROM DATA
+// ═══════════════════════════════════════
+function loadAdminFields() {
+  const h=D.hero, g=D.gradient, c=D.colors, w=D.why, co=D.contact;
+  // Hero
+  v('a-eyebrow',h.eyebrow); v('a-brand',h.brand); v('a-tagline',h.tagline);
+  v('a-addr1',h.addr1); v('a-addr2',h.addr2); v('a-cta',h.cta);
+  // Gradient
+  v('agc1',g.c1); v('agc1t',g.c1);
+  v('agc2',g.c2); v('agc2t',g.c2);
+  v('agc3',g.c3); v('agc3t',g.c3);
+  syncAdminGrad();
+  // Colors
+  v('a-pink',c.pink); v('a-pinkt',c.pink);
+  v('a-dark',c.dark); v('a-darkt',c.dark);
+  // Why
+  v('a-why-eyebrow',w.eyebrow); v('a-why-title',w.title);
+  v('a-why-italic',w.italic); v('a-why-desc',w.desc);
+  // Contact
+  v('a-faddr',co.addr); v('a-ftag',co.tag);
+  v('a-zalo-url',co.zaloUrl||''); v('a-zalo-txt',co.zaloTxt);
+  v('a-mess-url',co.messUrl||''); v('a-mess-txt',co.messTxt);
+  v('a-fb-url',co.fbUrl||''); v('a-ig-url',co.igUrl||'');
+  renderWhyStats();
+  renderCatList();
+  renderFooterMenuEdit();
+  renderProdTable();
+}
+
+function v(id,val){ const el=document.getElementById(id); if(el) el.value=val; }
+
+// ═══════════════════════════════════════
+//  APPLY ALL → SAVE → UPDATE WEBSITE
+// ═══════════════════════════════════════
+function applyAll() {
+  // Read from admin fields
+  D.hero = {
+    eyebrow: gv('a-eyebrow'), brand: gv('a-brand'), tagline: gv('a-tagline'),
+    addr1: gv('a-addr1'), addr2: gv('a-addr2'), cta: gv('a-cta')
+  };
+  D.gradient = { c1:gv('agc1'), c2:gv('agc2'), c3:gv('agc3') };
+  D.colors = { pink:gv('a-pink'), dark:gv('a-dark') };
+  D.why = {
+    eyebrow:gv('a-why-eyebrow'), title:gv('a-why-title'),
+    italic:gv('a-why-italic'), desc:gv('a-why-desc')
+  };
+  D.contact = {
+    addr:gv('a-faddr'), tag:gv('a-ftag'),
+    zaloUrl:gv('a-zalo-url'), zaloTxt:gv('a-zalo-txt'),
+    messUrl:gv('a-mess-url'), messTxt:gv('a-mess-txt'),
+    fbUrl:gv('a-fb-url'), igUrl:gv('a-ig-url')
+  };
+  // Read categories from inputs
+  D.categories = Array.from(document.querySelectorAll('.cat-input')).map(i=>i.value).filter(Boolean);
+  // Read footer menu
+  D.footerMenu = Array.from(document.querySelectorAll('.fmenu-input')).map(i=>i.value).filter(Boolean);
+  // Read why stats
+  D.whyStats = D.whyStats.map((_,i)=>({
+    num: (document.getElementById('ws-num-'+i)||{value:_.num}).value,
+    label: (document.getElementById('ws-lbl-'+i)||{value:_.label}).value
+  }));
+  saveData();
+  applyToWebsite();
+  showToast('Đã áp dụng thay đổi!');
+}
+
+function gv(id){ const el=document.getElementById(id); return el?el.value:''; }
+
+// ═══════════════════════════════════════
+//  APPLY DATA → WEBSITE DOM
+// ═══════════════════════════════════════
+function applyToWebsite() {
+  const h=D.hero, g=D.gradient, c=D.colors, w=D.why, co=D.contact;
+
+  // CSS vars
+  document.documentElement.style.setProperty('--pink', c.pink);
+  document.documentElement.style.setProperty('--dark', c.dark);
+  document.documentElement.style.setProperty('--gc1', g.c1);
+  document.documentElement.style.setProperty('--gc2', g.c2);
+  document.documentElement.style.setProperty('--gc3', g.c3);
+
+  // Hero
+  setText('site-eyebrow', h.eyebrow);
+  const bname = h.brand.replace(/haus$/i,'');
+  setText('site-brand-text', bname);
+  setText('site-tagline', h.tagline);
+  setText('site-addr1', h.addr1);
+  setText('site-addr2', h.addr2);
+  setText('site-cta-btn', h.cta);
+
+  // Logo
+  setText('site-logo', '');
+  document.getElementById('site-logo').innerHTML = bname+'<span>haus</span>';
+
+  // Hero gradient
+  document.getElementById('site-hero').style.background =
+    `linear-gradient(135deg,${g.c1} 0%,${g.c2} 50%,${g.c3} 100%)`;
+
+  // Hero image grid
+  const grid = document.getElementById('hero-img-grid');
+  const imgs = D.products.slice(0,6);
+  while(imgs.length<6) imgs.push({emoji:'✨',bg:'#F5F5F5',imgData:'',imgUrl:''});
+  grid.innerHTML = imgs.map(p=>{
+    const src = p.imgData||p.imgUrl||'';
+    return src
+      ? `<div class="hero-img" style="background:${p.bg};padding:0;overflow:hidden"><img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block"></div>`
+      : `<div class="hero-img" style="background:${p.bg}">${p.emoji||'🛍️'}</div>`;
+  }).join('');
+
+  // Categories
+  document.getElementById('site-categories').innerHTML =
+    D.categories.map((c,i)=>`<button class="pill${i===0?' active':''}" onclick="setSiteCat(this)">${c}</button>`).join('');
+
+  // Products
+  document.getElementById('site-products').innerHTML = D.products.map(p=>{
+    const src = p.imgData||p.imgUrl||'';
+    const imgHTML = src
+      ? `<div class="product-img-placeholder" style="background:${p.bg};padding:0;overflow:hidden"><img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block"></div>`
+      : `<div class="product-img-placeholder" style="background:${p.bg}">${p.emoji||'🛍️'}</div>`;
+    return `<div class="product-card">
+      ${p.badge?`<span class="product-badge">${p.badge}</span>`:''}
+      <button class="wish-btn" onclick="toggleWish(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      ${imgHTML}
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-sub">${p.sub}</div>
+        <div class="product-bottom">
+          <span class="product-price">${p.price}</span>
+          <button class="btn-consult"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Tư vấn</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('site-prod-count').textContent = D.products.length + ' SẢN PHẨM';
+
+  // Why
+  setText('why-eyebrow-text', w.eyebrow);
+  setText('why-title-text', w.title);
+  setText('why-italic-text', w.italic);
+  setText('why-desc-text', w.desc);
+  document.getElementById('why-stats-display').innerHTML = D.whyStats.map(s=>`
+    <div class="why-stat-item"><span class="stat-number">${s.num.replace('\n','<br>')}</span><span class="stat-label">${s.label}</span></div>`).join('');
+
+  // Footer
+  document.getElementById('footer-logo-text').innerHTML = bname+'<span>haus</span>';
+  setText('footer-addr', co.addr);
+  setText('footer-tag', co.tag);
+  document.getElementById('footer-menu').innerHTML = D.footerMenu.map(m=>`<a href="#">${m}</a>`).join('');
+  document.getElementById('footer-copy').textContent = `© 2025 ${h.brand} · ${h.tagline}`;
+
+  // Social
+  setHref('social-fb', co.fbUrl||'#');
+  setHref('social-ig', co.igUrl||'#');
+  setHref('social-mess', co.messUrl||'#');
+  setHref('cta-zalo', co.zaloUrl||'#');
+  setHref('cta-mess', co.messUrl||'#');
+  setText('cta-zalo-text', co.zaloTxt);
+  setText('cta-mess-text', co.messTxt);
+}
+
+function setText(id, txt){ const el=document.getElementById(id); if(el) el.textContent=txt; }
+function setHref(id, url){ const el=document.getElementById(id); if(el) el.href=url; }
+
+// ═══════════════════════════════════════
+//  RENDER ADMIN UI COMPONENTS
+// ═══════════════════════════════════════
+function renderAll() { renderProdTable(); renderCatList(); renderWhyStats(); renderFooterMenuEdit(); updateDashStats(); }
+
+function renderProdTable() {
+  document.getElementById('prod-tbody').innerHTML = D.products.map((p,i)=>{
+    const imgSrc = p.imgData || p.imgUrl || '';
+    const thumb = imgSrc
+      ? `<div class="p-emoji" style="background:${p.bg};overflow:hidden;padding:0"><img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover;display:block"></div>`
+      : `<div class="p-emoji" style="background:${p.bg}">${p.emoji||'🛍️'}</div>`;
+    return `<tr>
+      <td>${thumb}</td>
+      <td><strong>${p.name}</strong></td>
+      <td><span style="font-size:11px;color:var(--muted)">${p.sub}</span></td>
+      <td><strong>${p.price}</strong></td>
+      <td>${p.badge?`<span class="p-badge pb-${p.badge==='Best Seller'?'bs':p.badge==='New'?'new':'sale'}">${p.badge}</span>`:'<span style="color:#ddd;font-size:11px">—</span>'}</td>
+      <td style="padding-right:16px"><div class="a-btns">
+        <button class="a-btn" onclick="openProdModal(${i})" title="Sửa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        <button class="a-btn del" onclick="delProd(${i})" title="Xóa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+      </div></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('prod-count-lbl').textContent = D.products.length+' sản phẩm';
+}
+
+function renderCatList() {
+  document.getElementById('cat-list-body').innerHTML = D.categories.map((c,i)=>`
+    <div class="cat-row">
+      <input type="text" class="cat-input" value="${c}" oninput="D.categories[${i}]=this.value" style="flex:1">
+      ${i>0?`<button class="a-btn del" onclick="D.categories.splice(${i},1);renderCatList()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`:'<div style="width:30px"></div>'}
+    </div>`).join('');
+  document.getElementById('ds-cats').textContent = D.categories.length;
+}
+
+function addCat() { D.categories.push('Danh mục mới'); renderCatList(); }
+
+function renderWhyStats() {
+  document.getElementById('why-stats-edit').innerHTML = D.whyStats.map((s,i)=>`
+    <div class="stat-edit-row">
+      <div class="f-field" style="margin:0"><label>Số liệu ${i+1}</label><input type="text" id="ws-num-${i}" value="${s.num.replace('\n',' ')}"></div>
+      <div class="f-field" style="margin:0"><label>Nhãn ${i+1}</label><input type="text" id="ws-lbl-${i}" value="${s.label}"></div>
+    </div>`).join('');
+}
+
+function renderFooterMenuEdit() {
+  document.getElementById('footer-menu-edit').innerHTML = D.footerMenu.map((m,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+      <input type="text" class="fmenu-input" value="${m}" oninput="D.footerMenu[${i}]=this.value" style="flex:1">
+      <button class="a-btn del" onclick="D.footerMenu.splice(${i},1);renderFooterMenuEdit()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>`).join('')+`
+    <button class="add-row-btn" style="margin-top:8px" onclick="D.footerMenu.push('Menu mới');renderFooterMenuEdit()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Thêm mục</button>`;
+}
+
+function updateDashStats() { document.getElementById('ds-prods').textContent=D.products.length; document.getElementById('ds-cats').textContent=D.categories.length; }
+
+// ═══════════════════════════════════════
+//  PRODUCT MODAL
+// ═══════════════════════════════════════
+function openProdModal(idx) {
+  const isEdit = idx !== undefined;
+  const p = isEdit ? D.products[idx] : null;
+  document.getElementById('modal-mode-txt').textContent = isEdit?'Chỉnh sửa sản phẩm':'Thêm sản phẩm';
+  document.getElementById('edit-idx').value = isEdit?idx:'-1';
+  v('m-name', isEdit?p.name:'');
+  v('m-sub', isEdit?p.sub:'JELLYCAT · MEDIUM');
+  v('m-price', isEdit?p.price:'');
+  v('m-badge', isEdit?p.badge:'');
+  v('m-bg', isEdit?p.bg:'#F8F5F0');
+  v('m-bgt', isEdit?p.bg:'#F8F5F0');
+  v('m-img-url', isEdit&&p.imgUrl?p.imgUrl:'');
+  v('m-img-data', isEdit&&p.imgData?p.imgData:'');
+  // Show preview
+  const imgSrc = (isEdit && (p.imgData||p.imgUrl)) ? (p.imgData||p.imgUrl) : '';
+  setImgPreview(imgSrc);
+  updateImgPreview();
+  document.getElementById('prod-modal').classList.add('open');
+}
+
+function closeProdModal() { document.getElementById('prod-modal').classList.remove('open'); }
+
+function saveProd() {
+  const idx = parseInt(document.getElementById('edit-idx').value);
+  const imgData = gv('m-img-data');
+  const imgUrl = gv('m-img-url');
+  const p = {
+    name: gv('m-name')||'Sản phẩm mới',
+    sub: gv('m-sub'),
+    price: gv('m-price')||'0đ',
+    badge: gv('m-badge'),
+    bg: gv('m-bg'),
+    imgData: imgData||'',
+    imgUrl: imgUrl||'',
+    emoji: imgData||imgUrl ? '' : '🛍️'
+  };
+  if(idx===-1) D.products.push(p); else D.products[idx]=p;
+  saveData();
+  renderProdTable(); updateDashStats();
+  closeProdModal(); showToast('Đã lưu sản phẩm!');
+}
+
+function delProd(i) {
+  if(confirm(`Xóa "${D.products[i].name}"?`)) { D.products.splice(i,1); renderProdTable(); updateDashStats(); showToast('Đã xóa!'); }
+}
+
+// Image upload handlers
+function handleImgUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const data = ev.target.result;
+    document.getElementById('m-img-data').value = data;
+    document.getElementById('m-img-url').value = '';
+    setImgPreview(data);
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleUrlInput(url) {
+  if (!url) { setImgPreview(''); return; }
+  document.getElementById('m-img-data').value = '';
+  setImgPreview(url);
+}
+
+function setImgPreview(src) {
+  const img = document.getElementById('img-preview-img');
+  const inner = document.getElementById('img-preview-inner');
+  const removeBtn = document.getElementById('img-remove-btn');
+  if (src) {
+    img.src = src;
+    img.style.display = 'block';
+    inner.style.display = 'none';
+    removeBtn.style.display = 'flex';
+  } else {
+    img.src = '';
+    img.style.display = 'none';
+    inner.style.display = 'flex';
+    removeBtn.style.display = 'none';
+  }
+}
+
+function removeImg(e) {
+  e.stopPropagation();
+  document.getElementById('m-img-data').value = '';
+  document.getElementById('m-img-url').value = '';
+  document.getElementById('m-img-upload').value = '';
+  setImgPreview('');
+}
+
+function updateImgPreview() {
+  const bg = document.getElementById('m-bg').value;
+  document.getElementById('img-preview-wrap').style.background = bg;
+}
+
+// ═══════════════════════════════════════
+//  COLOR HELPERS
+// ═══════════════════════════════════════
+function syncAdminGrad() {
+  const c1=document.getElementById('agc1').value;
+  const c2=document.getElementById('agc2').value;
+  const c3=document.getElementById('agc3').value;
+  ['agc1t','agc2t','agc3t'].forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.value=[c1,c2,c3][i]; });
+  const prev=document.getElementById('a-grad-prev');
+  if(prev) prev.style.background=`linear-gradient(135deg,${c1} 0%,${c2} 50%,${c3} 100%)`;
+}
+function syncAdminGradText(cId,tId) {
+  const v=document.getElementById(tId).value;
+  if(/^#[0-9a-fA-F]{6}$/.test(v)) { document.getElementById(cId).value=v; syncAdminGrad(); }
+}
+function syncColorText(cId,tId) {
+  const v=document.getElementById(tId).value;
+  if(/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById(cId).value=v;
+}
+function syncBrand() {
+  const p=document.getElementById('a-pink').value;
+  const d=document.getElementById('a-dark').value;
+  document.getElementById('a-pinkt').value=p;
+  document.getElementById('a-darkt').value=d;
+  const sp=document.getElementById('logo-prev-span');
+  if(sp) sp.style.color=p;
+}
+
+// ═══════════════════════════════════════
+//  WEBSITE INTERACTIONS
+// ═══════════════════════════════════════
+function setSiteCat(btn) { document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active')); btn.classList.add('active'); }
+function toggleWish(btn) {
+  btn.classList.toggle('liked');
+  btn.querySelector('svg').setAttribute('fill', btn.classList.contains('liked')?'currentColor':'none');
+}
+
+// ═══════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ═══════════════════════════════════════
+//  SECRET TAP (nhấn logo 5 lần)
+// ═══════════════════════════════════════
+let tapCount = 0, tapTimer = null;
+function secretTap() {
+  tapCount++;
+  const bar = document.getElementById('tap-bar');
+  if (bar) bar.style.width = (tapCount / 5 * 100) + '%';
+  clearTimeout(tapTimer);
+  if (tapCount >= 5) {
+    tapCount = 0;
+    if (bar) { bar.style.width = '100%'; setTimeout(()=>{ bar.style.width='0%'; },300); }
+    openLock();
+  } else {
+    tapTimer = setTimeout(() => {
+      tapCount = 0;
+      if (bar) bar.style.width = '0%';
+    }, 2000);
+  }
+}
+
+// ═══════════════════════════════════════
+//  INIT ON LOAD
+// ═══════════════════════════════════════
+window.addEventListener('DOMContentLoaded', ()=>{
+  applyToWebsite();
+  syncAdminGrad();
+  // Phím tắt (máy tính)
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.shiftKey && (e.key==='A'||e.key==='a')) { e.preventDefault(); openLock(); }
+  });
+  // URL hash: mở file#admin để vào thẳng lock screen
+  if (location.hash === '#admin') openLock();
+});
+</script>
+</body>
+</html>
